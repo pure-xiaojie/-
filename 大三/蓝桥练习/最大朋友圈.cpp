@@ -1,30 +1,28 @@
 #include<cstdio>
 #include<iostream>
-
-using namespace std;
-#define maxn 1000000
-
-int num[maxn];
+#define maxn 1000005
+int fri[maxn];
 int sum[maxn];
 int res;
 
-int findFather(int x)
-{
-    if(x == num[x])
-        return x;
-    return num[x] = findFather(num[x]);
-}
+using namespace std;
 
-void merge_ab(int a, int b)
+int find_F(int x)
 {
-    int x = findFather(a);
-    int y = findFather(b);
+    if(x == fri[x])
+        return x;
+    return fri[x] = find_F(fri[x]);
+}
+void merge_ab(int a,int b) {
+    int x = find_F(a);
+    int y = find_F(b);
 
     if(x != y) {
-        num[x] = y;
+        fri[x] = y;
         sum[y] += sum[x];
-        res = max(sum[y],res);
+        res = max(res,sum[y]);
     }
+
 }
 int main()
 {
@@ -32,14 +30,14 @@ int main()
     while(~scanf("%d",&n))
     {
         for(int i = 0; i < maxn; i++) {
-            num[i] = i;
+            fri[i] = i;
             sum[i] = 1;
         }
         int a,b;
         res = 1;
         for(int i = 0; i < n; i++) {
-            cin >> a >> b;
-            merge_ab(a,b);
+           cin >> a >> b;
+           merge_ab(a,b);
         }
         cout << res << endl;
     }
